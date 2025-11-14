@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Musculosa Cut</title>
+  <link rel="stylesheet" href="producto.css">
+  <link rel="icon" type="image/png" href="../imagenes/logo.png">
+</head>
+<body>
+
+  <!-- PERFIL -->
+  <div class="perfil">
+    <img src="../imagenes/logo.png" alt="perfil">
+    <h2>INTIMAMENTE MODA</h2>
+  </div>
+
+  <!-- MENÚ CON CARRITO -->
+  <nav>
+    <a href="../index.html">CATÁLOGO</a>
+    <a href="../principal/ofertas.html">OFERTAS</a>
+    <a href="../principal/contactos.html">CONTACTO</a>
+    <a href="#" id="ver-carrito">🛒 Carrito (<span id="cantidad-carrito">0</span>)</a>
+  </nav>
+
+  <div class="contenedor-producto">
+    <!-- Galería miniaturas -->
+    <div class="galeria">
+      <img src="../imagenes/musculosa1.png" alt="Vista frontal" class="activa">
+      <img src="../imagenes/musculosa2.png" alt="Vista lateral">
+      <img src="../imagenes/musculosa3.png" alt="Vista trasera">
+    </div>
+
+    <!-- Imagen principal -->
+    <div class="imagen-principal">
+      <img src="../imagenes/musculosa1.png" alt="Musculosa principal" id="principal">
+    </div>
+
+    <!-- Info del producto -->
+    <div class="info">
+      <h1>MUSCULOSA CUT</h1>
+      <p class="precio">$35.000</p>
+      <p class="oferta">$31.500 con transferencia</p>
+      
+      <div class="talles">
+        <h3>Talle</h3>
+        <button>S</button>
+        <button>M</button>
+        <button>L</button>
+      </div>
+
+      <div class="cantidad">
+        <button onclick="modificarCantidad(-1)">-</button>
+        <input type="text" value="1" id="cantidad">
+        <button onclick="modificarCantidad(1)">+</button>
+      </div>
+
+      <button class="btn-carrito" id="agregarCarrito">Agregar al carrito</button>
+
+      <div class="detalles">
+        <h3>Descripción</h3>
+        <p>Musculosa boxy fit de jersey de algodón.</p>
+        <p>Composición: 100% algodón.</p>
+        <p>Se recomienda lavar con agua fría.</p>
+
+        <h3>Medios de Pago</h3>
+        <p>6 cuotas sin interés con tarjeta. Transferencia con descuento.</p>
+
+        <h3>Envíos</h3>
+        <p>Envío a todo el país. Gratis desde $50.000.</p>
+
+        <h3>Pickup</h3>
+        <p>Podés retirar gratis en nuestro local.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL CARRITO -->
+  <div id="modal-carrito" class="modal">
+    <div class="modal-contenido">
+      <h2>🛍️ Tu carrito</h2>
+      <ul id="lista-carrito"></ul>
+      <p id="total"></p>
+      <div class="botones-carrito">
+        <button id="vaciar-carrito" class="btn-rojo">Vaciar carrito</button>
+        <button id="cerrar-carrito" class="btn-negro">Cerrar</button>
+        <button id="pagar-carrito" class="btn-azul">Pagar 💳</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Miniaturas
+    const principal = document.getElementById('principal');
+    const miniaturas = document.querySelectorAll('.galeria img');
+    miniaturas.forEach(img => {
+      img.addEventListener('click', () => {
+        principal.src = img.src;
+        miniaturas.forEach(i => i.classList.remove('activa'));
+        img.classList.add('activa');
+      });
+    });
+
+    // Cantidad
+    function modificarCantidad(valor) {
+      const input = document.getElementById('cantidad');
+      let cantidad = parseInt(input.value);
+      cantidad += valor;
+      if (cantidad < 1) cantidad = 1;
+      input.value = cantidad;
+    }
+
+    // Talles
+    const botonesTalle = document.querySelectorAll('.talles button');
+    let talleSeleccionado = "";
+    botonesTalle.forEach(btn => {
+      btn.addEventListener('click', () => {
+        botonesTalle.forEach(b => b.classList.remove('seleccionado'));
+        btn.classList.add('seleccionado');
+        talleSeleccionado = btn.textContent;
+      });
+    });
+
+    // Carrito con localStorage
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const cantidadCarrito = document.getElementById('cantidad-carrito');
+    const listaCarrito = document.getElementById('lista-carrito');
+    const modalCarrito = document.getElementById('modal-carrito');
+    const verCarrito = document.getElementById('ver-carrito');
+    const cerrarCarrito = document.getElementById('cerrar-carrito');
+    const vaciarCarrito = document.getElementById('vaciar-carrito');
+    const pagarCarrito = document.getElementById('pagar-carrito');
+    const total = document.getElementById('total');
+
+    document.getElementById('agregarCarrito').addEventListener('click', () => {
+      const cantidad = parseInt(document.getElementById('cantidad').value);
+      const producto = {
+        nombre: "Musculosa Cut",
+        precio: 35000,
+        talle: talleSeleccionado || "No seleccionado",
+        cantidad: cantidad
+      };
+      carrito.push(producto);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      actualizarCarrito();
+      alert(`${producto.nombre} agregada al carrito 🛍️`);
+    });
+
+    function actualizarCarrito() {
+      listaCarrito.innerHTML = '';
+      let totalCompra = 0;
+      carrito.forEach((p, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${p.nombre} (Talle ${p.talle}) x${p.cantidad} - $${(p.precio * p.cantidad).toLocaleString()}
+          <button class="eliminar" data-index="${i}">🗑️</button>
+        `;
+        listaCarrito.appendChild(li);
+        totalCompra += p.precio * p.cantidad;
+      });
+      cantidadCarrito.textContent = carrito.reduce((acc, p) => acc + p.cantidad, 0);
+      total.textContent = carrito.length ? `Total: $${totalCompra.toLocaleString()}` : 'El carrito está vacío.';
+
+      document.querySelectorAll('.eliminar').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const index = e.target.dataset.index;
+          carrito.splice(index, 1);
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+          actualizarCarrito();
+        });
+      });
+    }
+
+    verCarrito.addEventListener('click', () => modalCarrito.style.display = 'flex');
+    cerrarCarrito.addEventListener('click', () => modalCarrito.style.display = 'none');
+    vaciarCarrito.addEventListener('click', () => {
+      carrito = [];
+      localStorage.removeItem('carrito');
+      actualizarCarrito();
+    });
+
+    pagarCarrito.addEventListener('click', () => {
+      if (carrito.length === 0) {
+        alert('El carrito está vacío.');
+        return;
+      }
+      window.location.href = '../principal/pago.html';
+    });
+
+    actualizarCarrito();
+  </script>
+</body>
+</html>

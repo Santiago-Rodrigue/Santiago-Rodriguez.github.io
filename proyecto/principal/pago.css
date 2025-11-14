@@ -1,0 +1,92 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.contenedor {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.metodos {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.tarjeta-container {
+  margin-bottom: 20px;
+}
+
+.tarjeta {
+  background: linear-gradient(135deg, #292929, #505050);
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+  margin: 10px 0;
+  position: relative;
+}
+
+.chip {
+  width: 40px;
+  height: 30px;
+  background: gold;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.num-tarjeta {
+  font-size: 1.2em;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.nombre-tarjeta, .fecha-tarjeta {
+  font-size: 0.9em;
+}
+
+.fila {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+button {
+  background: black;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #333;
+}
+
+.transferencia {
+  text-align: left;
+  padding: 10px;
+  background: #f8f8f8;
+  border-radius: 6px;
+  font-size: 14px;
+}

@@ -1,0 +1,71 @@
+body {
+    font-size: 18px;
+    font-family: Arial, sans-serif;    /* Cambia el tipo de letra */
+    background-color: #f2f2f2;         /* Color de fondo */
+    margin: 0;                         /* Quita márgenes por defecto */
+    padding: 0;                        /* Quita el relleno por defecto */
+    display: flex;                     /* Activa el sistema flexbox */
+    justify-content: center;           /* Centra horizontalmente */
+    align-items: center;               /* Centra verticalmente */
+    height: 100vh;                      /* Ocupa toda la altura de la ventana */
+}
+
+@media(max-width: 992px){
+  body{
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px){
+  body{
+    font-size: 14px;
+  }
+  nav{
+    flex-direction: column;
+  }
+}
+
+/* Estilo del formulario */
+form {
+    background-color: white;           /* Fondo blanco */
+    padding: 20px;                      /* Espacio interno */
+    border-radius: 8px;                 /* Bordes redondeados */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Sombra suave */
+    width: 300px;                       /* Ancho fijo */
+    display: flex;                      /* Usa flexbox */
+    flex-direction: column;             /* Elementos en columna */
+}
+
+/* Estilo del título */
+h2 {
+    text-align: center;                 /* Centra el texto */
+    margin-bottom: 15px;                 /* Espacio debajo */
+}
+
+/* Campos de texto */
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+    width: 100%;                         /* Ocupa todo el ancho */
+    padding: 10px;                       /* Altura interna */
+    margin-top: 5px;                     /* Espacio encima */
+    margin-bottom: 15px;                 /* Espacio debajo */
+    border: 1px solid #ccc;              /* Borde gris */
+    border-radius: 4px;                  /* Bordes redondeados */
+}
+
+/* Botón */
+input[type="submit"] {
+    background-color: rgb(255, 0, 0);           /* Fondo verde */
+    color: white;                        /* Texto blanco */
+    padding: 10px;                       /* Altura interna */
+    border: none;                        /* Sin borde */
+    border-radius: 4px;                  /* Bordes redondeados */
+    cursor: pointer;                     /* Cambia el cursor a mano */
+    font-weight: bold;                   /* Texto en negrita */
+}
+
+/* Efecto al pasar el mouse */
+input[type="submit"]:hover {
+    background-color: #680202;           /* Verde más oscuro */
+}

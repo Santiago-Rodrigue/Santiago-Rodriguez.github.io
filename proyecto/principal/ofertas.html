@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ofertas - Intimamente Moda</title>
+  <link rel="stylesheet" href="principal.css">
+  <link rel="icon" type="image/png" href="../imagenes/logo.png">
+</head>
+<body>
+
+  <!-- PERFIL -->
+  <div class="perfil">
+    <img src="../imagenes/logo.png" alt="perfil">
+    <h2>INTIMAMENTE MODA</h2>
+  </div>
+
+  <!-- MENÚ -->
+  <nav>
+    <a href="../index.html">CATÁLOGO</a>
+    <a href="ofertas.html">OFERTAS</a>
+    <a href="contactos.html">CONTACTO</a>
+    <a href="#" id="ver-carrito">🛒 Carrito (<span id="cantidad-carrito">0</span>)</a>
+  </nav>
+
+  <!-- SECCIÓN DE OFERTAS -->
+  <section class="catalogo">
+    <!-- Producto 1 -->
+    <div class="producto" data-nombre="Jogging Super Baggy Melo" data-precio="69000">
+      <a href="../ropa/jogging.html" class="producto-link">
+        <div class="etiqueta-oferta">10% OFF</div>
+        <img src="../imagenes/jogging1.png" data-hover="../imagenes/jogging2.png" alt="JOGGING SUPER BAGGY MELO">
+        <h3>JOGGING SUPER BAGGY MELO</h3>
+        <p class="precio-original">$76.600</p>
+        <p class="precio-oferta">$69.000</p>
+      </a>
+      <button class="agregar-carrito">Agregar al carrito</button>
+    </div>
+
+    <!-- Producto 2 -->
+    <div class="producto" data-nombre="Musculosa Cut" data-precio="31500">
+      <a href="../ropa/musculosaCut.html" class="producto-link">
+        <div class="etiqueta-oferta">2x1</div>
+        <img src="../imagenes/musculosa1.png" data-hover="../imagenes/musculosa2.png" alt="MUSCULOSA CUT">
+        <h3>MUSCULOSA CUT</h3>
+        <p class="precio-original">$35.000</p>
+        <p class="precio-oferta">$31.500</p>
+      </a>
+      <button class="agregar-carrito">Agregar al carrito</button>
+    </div>
+
+    <!-- Producto 3 -->
+    <div class="producto" data-nombre="Jean Super Baggy Bear Insignia" data-precio="84800">
+      <a href="../ropa/baggyInsignia.html" class="producto-link">
+        <div class="etiqueta-oferta">20% OFF</div>
+        <img src="../imagenes/baggyInsignia1.png" data-hover="../imagenes/baggyInsignia2.png" alt="JEAN SUPER BAGGY BEAR INSIGNIA">
+        <h3>JEAN SUPER BAGGY BEAR INSIGNIA</h3>
+        <p class="precio-original">$106.000</p>
+        <p class="precio-oferta">$84.800</p>
+      </a>
+      <button class="agregar-carrito">Agregar al carrito</button>
+    </div>
+  </section>
+
+  <!-- MODAL CARRITO -->
+  <div id="modal-carrito" class="modal">
+    <div class="modal-contenido">
+      <h2>🛍️ Tu carrito</h2>
+      <ul id="lista-carrito"></ul>
+      <p id="total"></p>
+      <button id="vaciar-carrito">Vaciar carrito</button>
+      <button id="cerrar-carrito">Cerrar</button>
+      <button id="pagar-carrito">Pagar 💳</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-section">
+      <h3>AYUDA</h3>
+      <p><a href="../principal/preguntasFrecuentes.html">PREGUNTAS FRECUENTES</a></p>
+      <p>POLÍTICA DE PRIVACIDAD</p>
+      <p><a href="../principal/contactos.html">CONTACTO</a></p>
+    </div>
+    <div class="footer-section">
+      <h3>Intimamente Moda</h3>
+      <p><a href="../principal/catalogo.html">CATÁLOGO</a></p>
+      <p><a href="../principal/contactos.html">LOCALES</a></p>
+    </div>
+    <div class="footer-section">
+      <h3>CONTACTO</h3>
+      <p>+54 9 11 2795 2162</p>
+      <p>Intimamente Moda</p>
+      <p>Grand Bourg</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    // Hover
+    document.querySelectorAll('.producto img').forEach(img => {
+      const original = img.src;
+      const hover = img.getAttribute('data-hover');
+      if (hover) {
+        img.addEventListener('mouseenter', () => img.src = hover);
+        img.addEventListener('mouseleave', () => img.src = original);
+      }
+    });
+
+    // Carrito
+    const botonesAgregar = document.querySelectorAll('.agregar-carrito');
+    const listaCarrito = document.getElementById('lista-carrito');
+    const modalCarrito = document.getElementById('modal-carrito');
+    const verCarrito = document.getElementById('ver-carrito');
+    const cerrarCarrito = document.getElementById('cerrar-carrito');
+    const vaciarCarrito = document.getElementById('vaciar-carrito');
+    const pagarCarrito = document.getElementById('pagar-carrito');
+    const cantidadCarrito = document.getElementById('cantidad-carrito');
+    const total = document.getElementById('total');
+
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    actualizarCarrito();
+
+    botonesAgregar.forEach(boton => {
+      boton.addEventListener('click', e => {
+        e.preventDefault();
+        const producto = e.target.closest('.producto');
+        const nombre = producto.dataset.nombre;
+        const precio = parseFloat(producto.dataset.precio);
+
+        const existente = carrito.find(p => p.nombre === nombre);
+        if (existente) {
+          existente.cantidad++;
+        } else {
+          carrito.push({ nombre, precio, cantidad: 1 });
+        }
+
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarCarrito();
+      });
+    });
+
+    verCarrito.addEventListener('click', () => modalCarrito.style.display = 'flex');
+    cerrarCarrito.addEventListener('click', () => modalCarrito.style.display = 'none');
+    vaciarCarrito.addEventListener('click', () => {
+      carrito = [];
+      localStorage.removeItem('carrito');
+      actualizarCarrito();
+    });
+
+    pagarCarrito.addEventListener('click', () => {
+      if (carrito.length === 0) {
+        alert('El carrito está vacío.');
+        return;
+      }
+      window.location.href = '../principal/pago.html';
+    });
+
+    function actualizarCarrito() {
+      listaCarrito.innerHTML = '';
+      let totalCompra = 0;
+      carrito.forEach((p, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${p.nombre} x${p.cantidad} - $${(p.precio * p.cantidad).toLocaleString()}
+          <button class="eliminar" data-index="${i}">🗑️</button>
+        `;
+        listaCarrito.appendChild(li);
+        totalCompra += p.precio * p.cantidad;
+      });
+
+      cantidadCarrito.textContent = carrito.reduce((acc, p) => acc + p.cantidad, 0);
+      total.textContent = carrito.length ? `Total: $${totalCompra.toLocaleString()}` : 'El carrito está vacío.';
+
+      document.querySelectorAll('.eliminar').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const index = e.target.dataset.index;
+          carrito.splice(index, 1);
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+          actualizarCarrito();
+        });
+      });
+    }
+  </script>
+
+</body>
+</html>

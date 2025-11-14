@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo - Intimamente Moda</title>
+  <link rel="stylesheet" href="../proyecto/principal/principal.css">
+  <link rel="icon" type="image/png" href="../proyecto/imagenes/logo.pngs">
+</head>
+<body>
+
+  <!-- PERFIL -->
+  <div class="perfil">
+    <img src="../proyecto/imagenes/logo.png" alt="perfil">
+    <h2>INTIMAMENTE MODA</h2>
+  </div>
+
+  <!-- MENÚ -->
+  <nav>
+    <a href="index.html">CATÁLOGO</a>
+    <a href="../proyecto/principal/ofertas.html">OFERTAS</a>
+    <a href="../proyecto/principal/contactos.html">CONTACTO</a>
+    <a href="#" id="ver-carrito">🛒 Carrito (<span id="cantidad-carrito">0</span>)</a>
+  </nav>
+
+  <!-- CARRUSEL -->
+  <div class="carrusel">
+    <button class="prev">&#10094;</button>
+    <div class="carrusel-track">
+      <img src="../proyecto/imagenes/feria.png" alt="Banner 1">
+      <img src="../proyecto/imagenes/drop.png" alt="Banner 2">
+      <img src="../proyecto/imagenes/fotosDoble.png" alt="Banner 3">
+    </div>
+    <button class="next">&#10095;</button>
+  </div>
+
+  <!-- CATALOGO -->
+  <section class="catalogo">
+    <div class="producto" data-nombre="Bermuda Cargo Realtree" data-precio="89300">
+      <a href="../proyecto/ropa/bermuda.html" class="producto-link">
+        <img src="../proyecto/imagenes/bermuda1.png" data-hover="../proyecto/imagenes/bermuda2.png" alt="BERMUDA CARGO REALTREE">
+        <h3>BERMUDA CARGO REALTREE</h3>
+        <p class="precio">$89.300</p>
+      </a>
+      <button class="agregar-carrito">Agregar al carrito</button>
+    </div>
+
+    <div class="producto" data-nombre="Jogging Super Baggy Melo" data-precio="76650">
+      <a href="../proyecto/ropa/jogging.html" class="producto-link">
+        <img src="../proyecto/imagenes/jogging1.png" data-hover="../proyecto/imagenes/jogging2.png" alt="JOGGING SUPER BAGGY MELO">
+        <h3>JOGGING SUPER BAGGY MELO</h3>
+        <p class="precio">$76.650</p>
+      </a>
+      <button class="agregar-carrito">Agregar al carrito</button>
+    </div>
+
+    <div class="producto" data-nombre="Jean Super Baggy Bear Insignia" data-precio="106100">
+      <a href="../proyecto/ropa/baggyInsignia.html" class="producto-link">
+        <img src="../proyecto/imagenes/baggyInsignia1.png" data-hover="../proyecto/imagenes/baggyInsignia2.png" alt="JEAN SUPER BAGGY BEAR INSIGNIA">
+        <h3>JEAN SUPER BAGGY BEAR INSIGNIA</h3>
+        <p class="precio">$106.100</p>
+      </a>
+      <button class="agregar-carrito">Agregar al carrito</button>
+    </div>
+
+    <div class="producto" data-nombre="Musculosa Cut" data-precio="35000">
+      <a href="../proyecto/ropa/musculosaCut.html" class="producto-link">
+        <img src="../proyecto/imagenes/musculosa1.png" data-hover="../proyecto/imagenes/musculosa2.png" alt="MUSCULOSA CUT">
+        <h3>MUSCULOSA CUT</h3>
+        <p class="precio">$35.000</p>
+      </a>
+      <button class="agregar-carrito">Agregar al carrito</button>
+    </div>
+  </section>
+
+  <!-- MODAL CARRITO -->
+  <div id="modal-carrito" class="modal">
+    <div class="modal-contenido">
+      <h2>🛍️ Tu carrito</h2>
+      <ul id="lista-carrito"></ul>
+      <p id="total"></p>
+      <button id="vaciar-carrito">Vaciar carrito</button>
+      <button id="cerrar-carrito">Cerrar</button>
+      <button id="pagar-carrito">Pagar 💳</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-section">
+      <h3>AYUDA</h3>
+      <p><a href="../proyecto/principal/preguntasFrecuentes.html">PREGUNTAS FRECUENTES</a></p>
+      <p>POLÍTICA DE PRIVACIDAD</p>
+      <p><a href="../proyecto/principal/contactos.html">CONTACTO</a></p>
+    </div>
+    <div class="footer-section">
+      <h3>Intimamente Moda</h3>
+      <p><a href="../proyecto/principal/catalogo.html">CATÁLOGO</a></p>
+      <p><a href="../proyecto/principal/contactos.html">LOCALES</a></p>
+    </div>
+    <div class="footer-section">
+      <h3>CONTACTO</h3>
+      <p>+54 9 11 2795 2162</p>
+      <p>Intimamente Moda</p>
+      <p>Grand Bourg</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    // Carrusel
+    const track = document.querySelector('.carrusel-track');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    let index = 0;
+    prevBtn.addEventListener('click', () => {
+      index = (index - 1 + track.children.length) % track.children.length;
+      track.style.transform = `translateX(-${index * 100}%)`;
+    });
+    nextBtn.addEventListener('click', () => {
+      index = (index + 1) % track.children.length;
+      track.style.transform = `translateX(-${index * 100}%)`;
+    });
+
+    // Hover
+    document.querySelectorAll('.producto img').forEach(img => {
+      const original = img.src;
+      const hover = img.getAttribute('data-hover');
+      if (hover) {
+        img.addEventListener('mouseenter', () => img.src = hover);
+        img.addEventListener('mouseleave', () => img.src = original);
+      }
+    });
+
+    // Carrito
+    const botonesAgregar = document.querySelectorAll('.agregar-carrito');
+    const listaCarrito = document.getElementById('lista-carrito');
+    const modalCarrito = document.getElementById('modal-carrito');
+    const verCarrito = document.getElementById('ver-carrito');
+    const cerrarCarrito = document.getElementById('cerrar-carrito');
+    const vaciarCarrito = document.getElementById('vaciar-carrito');
+    const pagarCarrito = document.getElementById('pagar-carrito');
+    const cantidadCarrito = document.getElementById('cantidad-carrito');
+    const total = document.getElementById('total');
+
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    actualizarCarrito();
+
+    botonesAgregar.forEach(boton => {
+      boton.addEventListener('click', e => {
+        e.preventDefault();
+        const producto = e.target.closest('.producto');
+        const nombre = producto.dataset.nombre;
+        const precio = parseFloat(producto.dataset.precio);
+
+        const existente = carrito.find(p => p.nombre === nombre);
+        if (existente) {
+          existente.cantidad++;
+        } else {
+          carrito.push({ nombre, precio, cantidad: 1 });
+        }
+
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarCarrito();
+      });
+    });
+
+    verCarrito.addEventListener('click', () => modalCarrito.style.display = 'flex');
+    cerrarCarrito.addEventListener('click', () => modalCarrito.style.display = 'none');
+    vaciarCarrito.addEventListener('click', () => {
+      carrito = [];
+      localStorage.removeItem('carrito');
+      actualizarCarrito();
+    });
+
+    pagarCarrito.addEventListener('click', () => {
+      if (carrito.length === 0) {
+        alert('El carrito está vacío.');
+        return;
+      }
+      window.location.href = '../proyecto/principal/pago.html';
+    });
+
+    function actualizarCarrito() {
+      listaCarrito.innerHTML = '';
+      let totalCompra = 0;
+      carrito.forEach((p, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${p.nombre} x${p.cantidad} - $${(p.precio * p.cantidad).toLocaleString()}
+          <button class="eliminar" data-index="${i}">🗑️</button>
+        `;
+        listaCarrito.appendChild(li);
+        totalCompra += p.precio * p.cantidad;
+      });
+
+      cantidadCarrito.textContent = carrito.reduce((acc, p) => acc + p.cantidad, 0);
+      total.textContent = carrito.length ? `Total: $${totalCompra.toLocaleString()}` : 'El carrito está vacío.';
+
+      document.querySelectorAll('.eliminar').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const index = e.target.dataset.index;
+          carrito.splice(index, 1);
+          localStorage.setItem('carrito', JSON.stringify(carrito));
+          actualizarCarrito();
+        });
+      });
+    }
+  </script>
+</body>
+</html>

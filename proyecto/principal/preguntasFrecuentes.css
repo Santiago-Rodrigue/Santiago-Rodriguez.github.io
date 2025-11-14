@@ -1,0 +1,112 @@
+:root{
+      --maxw: 1100px;
+      --txt: #111;
+      --muted:#555;
+      --bg:#f6f6f6;
+      --card:#fff;
+    }
+    html,body{margin:0;padding:0}
+
+    body{
+      font-family: Arial, sans-serif;
+      font-size:18px;
+      margin: 0;
+      padding: 0;
+      line-height:1.6;
+      color:var(--txt);
+      background:var(--bg);
+    }
+  @media(max-width: 992px){
+  body{
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px){
+  body{
+    font-size: 14px;
+  }
+  nav{
+    flex-direction: column;
+  }
+}
+
+    /* PERFIL */
+.perfil {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+.perfil img {
+  width: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+/* MENÚ */
+nav {
+  background-color: #222;
+  display: flex;
+  justify-content: center;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: block;
+}
+nav a:hover {
+  background-color: #444;
+}
+    /* Encabezado simple (opcional, se puede quitar si lo integrás a tu layout) */
+    .topbar{
+      max-width: var(--maxw);
+      margin: 28px auto 6px;
+      padding: 0 18px;
+      text-align:center;
+    }
+    .title{
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:.5px;
+      text-transform:uppercase;
+      margin: 0 0 10px;
+    }
+    .divider{
+      height:2px;
+      background:#111;
+      width:100%;
+      margin: 10px 0 24px;
+    }
+
+    /* Contenido */
+    .wrap{
+      max-width: var(--maxw);
+      margin: 0 auto 60px;
+      padding: 0 18px;
+    }
+    .card{
+      background: var(--card);
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+      padding: 24px 26px;
+    }
+
+    .q{                /* pregunta */
+      font-weight:700;
+      margin: 18px 0 6px;
+    }
+    .a{                /* respuesta */
+      margin: 0 0 14px;
+    }
+
+    ul{ margin: 8px 0 16px 20px; }
+    a.link{ color:#0b67d2; text-decoration: none; }
+    a.link:hover{ text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width:640px){
+      .card{ padding:18px; }
+      .title{ font-size:18px; }
+    }

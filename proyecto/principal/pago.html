@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago - Intimamente Moda</title>
+    <link rel="stylesheet" href="pago.css">
+    <link rel="icon" type="image/png" href="../imagenes/logo.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>💳 Finalizar Compra</h1>
+
+        <div class="metodos">
+            <label><input type="radio" name="pago" value="tarjeta" checked> Tarjeta de crédito / débito</label>
+            <label><input type="radio" name="pago" value="transferencia"> Transferencia bancaria</label>
+        </div>
+
+    <!-- TARJETA -->
+    <div class="tarjeta-container" id="tarjetaContainer">
+      <div class="tarjeta" id="tarjeta">
+        <div class="frontal">
+          <div class="chip"></div>
+          <div class="num-tarjeta" id="numTarjeta">#### #### #### ####</div>
+          <div class="nombre-tarjeta" id="nombreTarjeta">NOMBRE DEL TITULAR</div>
+          <div class="fecha-tarjeta" id="fechaTarjeta">MM/AA</div>
+        </div>
+      </div>
+
+      <form id="formTarjeta">
+        <input type="text" id="numero" maxlength="19" placeholder="Número de tarjeta" required>
+        <input type="text" id="nombre" placeholder="Nombre del titular" required>
+        <div class="fila">
+          <input type="text" id="vencimiento" maxlength="5" inputmode="numeric" placeholder="MM/AA" required>
+          <input type="text" id="cvv" maxlength="3" placeholder="CVV" required>
+        </div>
+      </form>
+    </div>
+
+    <!-- TRANSFERENCIA -->
+    <div class="transferencia" id="transferenciaContainer" style="display:none;">
+      <p>📦 Transferencia bancaria</p>
+      <p>Alias: <b>intimamentemoda.mp</b></p>
+      <p>CBU: <b>0000003100032947583124</b></p>
+      <p>Banco: Mercado Pago</p>
+    </div>
+
+    <button id="btnPagar">💰 Finalizar compra</button>
+  </div>
+
+  <script>
+    const radios = document.querySelectorAll('input[name="pago"]');
+    const tarjetaContainer = document.getElementById('tarjetaContainer');
+    const transferenciaContainer = document.getElementById('transferenciaContainer');
+    const { jsPDF } = window.jspdf;
+
+    // Mostrar u ocultar los métodos
+    radios.forEach(radio => {
+      radio.addEventListener('change', () => {
+        tarjetaContainer.style.display = radio.value === 'tarjeta' ? 'block' : 'none';
+        transferenciaContainer.style.display = radio.value === 'transferencia' ? 'block' : 'none';
+      });
+    });
+
+    // Actualización visual de la tarjeta
+    document.getElementById('numero').addEventListener('input', e => {
+      const val = e.target.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim();
+      e.target.value = val;
+      document.getElementById('numTarjeta').textContent = val || '#### #### #### ####';
+    });
+
+    document.getElementById('nombre').addEventListener('input', e => {
+      document.getElementById('nombreTarjeta').textContent = e.target.value.toUpperCase() || 'NOMBRE DEL TITULAR';
+    });
+
+    const vencInput = document.getElementById('vencimiento');
+    vencInput.addEventListener('input', (e) => {
+      let v = e.target.value.replace(/\D/g, '');
+      if (v.length > 4) v = v.slice(0, 4);
+      if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+      e.target.value = v;
+      document.getElementById('fechaTarjeta').textContent = v || 'MM/AA';
+    });
+
+    vencInput.addEventListener('blur', () => {
+      const [mm, aa] = vencInput.value.split('/');
+      if (!mm || !aa || mm.length !== 2 || aa.length !== 2 || +mm < 1 || +mm > 12) {
+        vencInput.value = '';
+        document.getElementById('fechaTarjeta').textContent = 'MM/AA';
+      }
+    });
+
+    // ✅ Guardar compra + generar PDF
+    document.getElementById('btnPagar').addEventListener('click', () => {
+      const metodo = document.querySelector('input[name="pago"]:checked').value;
+      const nombre = document.getElementById('nombre').value || "Cliente";
+      const total = "35000"; // Reemplazar con el total real del carrito
+
+      // 1️⃣ Generar PDF
+      const doc = new jsPDF();
+      doc.setFontSize(16);
+      doc.text("🛍️ Comprobante de compra - Intimamente Moda", 10, 20);
+      doc.setFontSize(12);
+      doc.text("Fecha: " + new Date().toLocaleString(), 10, 35);
+      doc.text("Método de pago: " + metodo, 10, 45);
+      doc.text("Titular: " + nombre, 10, 55);
+      doc.text("Total: $" + total, 10, 65);
+      doc.text("¡Gracias por tu compra!", 10, 85);
+      doc.save("Comprobante_Compra.pdf");
+
+      // 2️⃣ Enviar datos al servidor PHP
+      fetch("guardarCompra.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: nombre,
+          precio: total,
+          cantidad: 1,
+          talle: "No especificado",
+          metodo: metodo
+        })
+      })
+      .then(res => res.json())
+      .then(data => console.log(data))
+      .catch(err => console.error("Error al guardar en CSV:", err));
+
+      alert("✅ Compra realizada con éxito. Se generó el comprobante en PDF y se guardó en el servidor.");
+    });
+  </script>
+</body>
+</html>
